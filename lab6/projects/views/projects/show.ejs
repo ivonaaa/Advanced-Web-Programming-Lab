@@ -1,0 +1,28 @@
+<% title = project.naziv %>
+<h1><%= project.naziv %></h1>
+<p><strong>Opis:</strong> <%= project.opis %></p>
+<p><strong>Cijena:</strong> <%= project.cijena %> €</p>
+<p><strong>Poslovi:</strong> <%= project.poslovi %></p>
+<p><strong>Traje od:</strong> <%= new Date(project.datumPocetka).toLocaleDateString() %> do <%= new Date(project.datumZavrsetka).toLocaleDateString() %></p>
+
+<hr />
+
+<h3>👥 Članovi tima</h3>
+<ul class="list-group mb-3">
+  <% project.tim.forEach(clan => { %>
+    <li class="list-group-item"><%= clan.name %> – <%= clan.role %></li>
+  <% }) %>
+</ul>
+
+<form action="/projects/<%= project._id %>/team" method="POST" class="mb-4">
+  <div class="row">
+    <div class="col"><input class="form-control" name="name" placeholder="Ime" required /></div>
+    <div class="col"><input class="form-control" name="role" placeholder="Uloga" required /></div>
+    <div class="col"><button class="btn btn-outline-success">Dodaj člana</button></div>
+  </div>
+</form>
+
+<a href="/projects/<%= project._id %>/edit" class="btn btn-warning">✏️ Uredi</a>
+<form action="/projects/<%= project._id %>/delete" method="POST" style="display:inline;">
+  <button class="btn btn-danger">🗑️ Obriši</button>
+</form>

@@ -1,0 +1,11 @@
+<% title = "Novi projekt" %>
+<h1>➕ Dodaj novi projekt</h1>
+<form action="/projects" method="POST" class="mt-4">
+  <div class="mb-3"><input class="form-control" name="naziv" placeholder="Naziv" required /></div>
+  <div class="mb-3"><textarea class="form-control" name="opis" placeholder="Opis"></textarea></div>
+  <div class="mb-3"><input class="form-control" name="cijena" type="number" placeholder="Cijena" /></div>
+  <div class="mb-3"><input class="form-control" name="poslovi" placeholder="Obavljeni poslovi" /></div>
+  <div class="mb-3"><label>Datum početka</label><input class="form-control" name="datumPocetka" type="date" /></div>
+  <div class="mb-3"><label>Datum završetka</label><input class="form-control" name="datumZavrsetka" type="date" /></div>
+  <button class="btn btn-primary">Spremi</button>
+</form>

@@ -1,0 +1,10 @@
+<% title = "Svi projekti" %>
+<h1 class="mb-4">📋 Lista projekata</h1>
+<ul class="list-group">
+  <% projects.forEach(p => { %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span><strong><%= p.naziv %></strong></span>
+      <a href="/projects/<%= p._id %>" class="btn btn-sm btn-outline-primary">Detalji</a>
+    </li>
+  <% }) %>
+</ul>
