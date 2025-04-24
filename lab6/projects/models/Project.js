@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const teamMemberSchema = new mongoose.Schema({
-  name: String,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   role: String
 });
 
@@ -12,6 +12,8 @@ const projectSchema = new mongoose.Schema({
   poslovi: String,
   datumPocetka: Date,
   datumZavrsetka: Date,
+  arhiviran: { type: Boolean, default: false },
+  voditelj: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   tim: [teamMemberSchema]
 });
 

@@ -11,6 +11,9 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const projectRoutes = require('./routes/projects');
 
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 const app = express();
 
 // View engine setup
@@ -31,6 +34,21 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
+app.use(session({
+  secret: 'tajna', 
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+  cookie: { maxAge: 1000 * 60 * 60 * 24 } 
+}));
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
+
+const authRoutes = require('./routes/auth');
+app.use('/', authRoutes);
 // Routes
 app.use('/projects', projectRoutes);
 app.use('/', indexRouter);

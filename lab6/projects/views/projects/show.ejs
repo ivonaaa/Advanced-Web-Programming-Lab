@@ -1,28 +1,69 @@
 <% title = project.naziv %>
 <h1><%= project.naziv %></h1>
+
 <p><strong>Opis:</strong> <%= project.opis %></p>
 <p><strong>Cijena:</strong> <%= project.cijena %> €</p>
 <p><strong>Poslovi:</strong> <%= project.poslovi %></p>
 <p><strong>Traje od:</strong> <%= new Date(project.datumPocetka).toLocaleDateString() %> do <%= new Date(project.datumZavrsetka).toLocaleDateString() %></p>
+
+<p>
+  <strong>Status:</strong>
+  <% if (project.arhiviran) { %>
+    <span class="badge bg-secondary">📦 Arhiviran</span>
+  <% } else { %>
+    <span class="badge bg-success">🟢 Aktivan</span>
+  <% } %>
+</p>
 
 <hr />
 
 <h3>👥 Članovi tima</h3>
 <ul class="list-group mb-3">
   <% project.tim.forEach(clan => { %>
-    <li class="list-group-item"><%= clan.name %> – <%= clan.role %></li>
+    <li class="list-group-item">
+      <%= clan.user?.ime || 'Nepoznat korisnik' %> – <%= clan.role %>
+    </li>
   <% }) %>
 </ul>
 
-<form action="/projects/<%= project._id %>/team" method="POST" class="mb-4">
-  <div class="row">
-    <div class="col"><input class="form-control" name="name" placeholder="Ime" required /></div>
-    <div class="col"><input class="form-control" name="role" placeholder="Uloga" required /></div>
-    <div class="col"><button class="btn btn-outline-success">Dodaj člana</button></div>
-  </div>
-</form>
+<%
+const jeClan = project.tim.some(t => t.user?._id?.toString() === user?._id?.toString());
+const jeVoditelj = project.voditelj._id?.toString() === user?._id?.toString();
+%>
 
-<a href="/projects/<%= project._id %>/edit" class="btn btn-warning">✏️ Uredi</a>
-<form action="/projects/<%= project._id %>/delete" method="POST" style="display:inline;">
-  <button class="btn btn-danger">🗑️ Obriši</button>
-</form>
+<% if (jeClan && !jeVoditelj) { %>
+  <form action="/projects/<%= project._id %>/update-poslovi" method="POST" class="mt-4">
+    <div class="mb-3">
+      <label for="poslovi" class="form-label">Ažuriraj obavljene poslove:</label>
+      <textarea class="form-control" name="poslovi" id="poslovi" rows="3"><%= project.poslovi %></textarea>
+    </div>
+    <button class="btn btn-primary">💾 Spremi</button>
+  </form>
+<% } %>
+
+<% if (jeVoditelj) { %>
+  <h4>➕ Dodaj člana iz baze korisnika</h4>
+  <form action="/projects/<%= project._id %>/team" method="POST" class="row g-2 mb-4 align-items-end">
+    <div class="col-md-6">
+      <label for="email" class="form-label">Korisnik (email)</label>
+      <select name="email" id="email" class="form-select" required>
+        <% korisnici.forEach(korisnik => { %>
+          <option value="<%= korisnik.email %>"><%= korisnik.ime %> (<%= korisnik.email %>)</option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="role" class="form-label">Uloga</label>
+      <input type="text" name="role" id="role" class="form-control" placeholder="Npr. Frontend Developer" required />
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-success w-100">Dodaj</button>
+    </div>
+  </form>
+
+  <a href="/projects/<%= project._id %>/edit" class="btn btn-warning">✏️ Uredi</a>
+
+  <form action="/projects/<%= project._id %>/delete" method="POST" style="display:inline;">
+    <button class="btn btn-danger">🗑️ Obriši</button>
+  </form>
+<% } %>

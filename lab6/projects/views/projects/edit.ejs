@@ -1,21 +1,41 @@
 <% title = "Uredi projekt" %>
 <h1>✏️ Uredi projekt</h1>
+
 <form action="/projects/<%= project._id %>" method="POST" class="mt-4">
-  <div class="mb-3"><input class="form-control" name="naziv" value="<%= project.naziv %>" required /></div>
-  <div class="mb-3"><textarea class="form-control" name="opis"><%= project.opis %></textarea></div>
-  <div class="mb-3"><input class="form-control" name="cijena" type="number" value="<%= project.cijena %>" /></div>
-  <div class="mb-3"><input class="form-control" name="poslovi" value="<%= project.poslovi %>" /></div>
+  <div class="mb-3">
+    <input class="form-control" name="naziv" value="<%= project.naziv %>" required />
+  </div>
+
+  <div class="mb-3">
+    <textarea class="form-control" name="opis"><%= project.opis %></textarea>
+  </div>
+
+  <div class="mb-3">
+    <input class="form-control" name="cijena" type="number" value="<%= project.cijena %>" />
+  </div>
+
+  <div class="mb-3">
+    <input class="form-control" name="poslovi" value="<%= project.poslovi %>" />
+  </div>
+
   <div class="mb-3">
     <label>Datum početka</label>
     <input class="form-control" name="datumPocetka" type="date"
       value="<%= project.datumPocetka ? project.datumPocetka.toISOString().split('T')[0] : '' %>" />
   </div>
-  
+
   <div class="mb-3">
     <label>Datum završetka</label>
     <input class="form-control" name="datumZavrsetka" type="date"
       value="<%= project.datumZavrsetka ? project.datumZavrsetka.toISOString().split('T')[0] : '' %>" />
   </div>
-  
+
+  <div class="form-check mb-4">
+    <input class="form-check-input" type="checkbox" name="arhiviran" id="arhiviran" <%= project.arhiviran ? 'checked' : '' %> />
+    <label class="form-check-label" for="arhiviran">
+      📦 Projekt je arhiviran
+    </label>
+  </div>
+
   <button class="btn btn-primary">Spremi izmjene</button>
 </form>

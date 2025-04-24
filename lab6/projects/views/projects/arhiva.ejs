@@ -1,0 +1,15 @@
+<% title = "Arhiva projekata" %>
+<h1 class="mb-4">📦 Arhivirani projekti</h1>
+
+<% if (projekti.length === 0) { %>
+  <p>Nema arhiviranih projekata na kojima ste bili uključeni.</p>
+<% } else { %>
+  <ul class="list-group">
+    <% projekti.forEach(p => { %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <strong><%= p.naziv %></strong>
+        <a href="/projects/<%= p._id %>" class="btn btn-sm btn-outline-dark">Detalji</a>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
